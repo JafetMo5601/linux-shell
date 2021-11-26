@@ -59,7 +59,7 @@ char *command_pwd(char **args) {
 
 char *read_command_line() {
     char *line = NULL;
-    ssize_t buffer_size = 0;
+    size_t buffer_size = 0;
     
     if (getline(&line, &buffer_size, stdin) == -1){
         if (feof(stdin)) {
@@ -111,8 +111,7 @@ char **split_command_input(char *command) {
 
 int launch_command(char **args)
 {
-  pid_t pid, wpid;
-  int status;
+  pid_t pid;
 
   pid = fork();
   if (pid == 0) {
@@ -125,10 +124,6 @@ int launch_command(char **args)
     
   } else if (pid < 0) {
     fprintf(stderr, "There was an unexpected error!\n");
-  } else {
-    do {
-      wpid = waitpid(pid, &status, WUNTRACED);
-    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
   }
 
   return 1;
